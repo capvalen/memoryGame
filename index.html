@@ -22,6 +22,9 @@ label[for="chkModo"]{
 .numerosJuego{
 	font-weight: 700;font-size: 2.4rem;
 }
+#primColumna label{
+margin:10px 0;
+}
 </style>
 <section>
 	<div class="container px-0 ">
@@ -31,54 +34,64 @@ label[for="chkModo"]{
 		<h2 class="display-3">Speed Memory</h2>
 	</div>
 </section>
-	<div class="container my-4" id="app">
-		<div class="card rounded-pill">
-			<div class="card-body">
-				<div class="row row-cols-2 row-cols-md-4">
-					<div class="col text-center">
-						<label for="">Dígitos:</label>
-						<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtDigitos" min=6 step=2 :value="digitos" @change="sumarDigito">
-					</div>
-					<div class="col text-center">
-						<label for="">Segundos:</label>
-						<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtSegundos" min=0.1 step="0.1" v-model="segundos">
-					</div>
-					<div class="col text-center">
-						<label for="">Modo rápido:</label>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="chkModo" v-on:click="modo = !modo;" :disabled="bloquear">
-							<label class="custom-control-label"  for="chkModo"><span v-if="modo==false">No</span> <span v-else>Sí</span></label>
-						</div>
-					</div>
-					<div class="col text-center">
-						<label for="">Iniciar:</label>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="iniciar(); inicio=!inicio; bloquear=true;" v-if="inicio" id="btnIniciar">Empezar</button>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="comprobar(); comprueba=!comprueba;" v-if="comprueba" id="btnComprobar">Comprobar</button>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false" v-if="reiniciar" id="btnComprobar">Nuevo</button>
-					</div>
-				</div>
-			</div>
-
-		</div>
-		<div class="card my-4 rounded-pill">
-			<div class="card-body py-5 d-flex align-items-center" id="divJuego">
-				<div class="card-title m-auto  ">
-					<div class="row d-flex justify-content-center" id="numerosPadre">
-						<div class="divInterno " v-if="!mostrarInputs" v-for="(item, index) in numerosArray" >
-							<h2 class="numerosJuego px-2" :data-id="index" ><span class="d1" v-bind:class="item.izquierda">{{item.dato.toString().substring(0, 1)}}</span><span class="d2" v-bind:class="item.derecha">{{item.dato.toString().substring(2, 1)}}</span></h2>
-						</div>
-					</div>
-						<div class="row" id="inputEditables" v-if="mostrarRespuestas">
-							<div class="d-flex flex-row py-2 rowEditable" v-for="(item, index) in digitos/2" :data-id="index">
-								<input type="text" v-model="numerosRespuesta[index].digito1" class="ml-2 inputEditable siguienteHermano" style='width: 50px' >
-								<input type="text" v-model="numerosRespuesta[index].digito2" class="mr-2 inputEditable siguientePadre" style='width: 50px' >
+	<div class="container-fluid my-4" id="app">
+		<div class="row">
+			<div class="col-sm-12 col-md-3" id="primColumna">
+				<div class="card my-4 rounded-pill">
+					<div class="card-body">
+						<div class="row row-cols-1">
+							<div class="col text-center">
+								<label for="">Dígitos:</label>
+								<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtDigitos" min=6 step=2 :value="digitos" @change="sumarDigito">
+							</div>
+							<div class="col text-center">
+								<label for="">Segundos:</label>
+								<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtSegundos" min=0.1 step="0.1" v-model="segundos">
+							</div>
+							<div class="col text-center">
+								<label for="">Modo rápido:</label>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="chkModo" v-on:click="modo = !modo;" :disabled="bloquear">
+									<label class="custom-control-label"  for="chkModo"><span v-if="modo==false">No</span> <span v-else>Sí</span></label>
+								</div>
+							</div>
+							<div class="col text-center">
+								<label for="">Iniciar:</label>
+								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="iniciar(); inicio=!inicio; bloquear=true;" v-if="inicio" id="btnIniciar">Empezar</button>
+								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="comprobar(); comprueba=!comprueba;" v-if="comprueba" id="btnComprobar">Comprobar</button>
+								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false" v-if="reiniciar" id="btnComprobar">Nuevo</button>
 							</div>
 						</div>
+					</div>
+		
+				</div>
+			</div>
 
-					
+
+			<div class="col">
+				<div class="card my-4 rounded-pill">
+					<div class="card-body py-5 d-flex align-items-center" id="divJuego">
+						<div class="card-title m-auto  ">
+							<div class="row d-flex justify-content-center" id="numerosPadre">
+								<div class="divInterno " v-if="!mostrarInputs" v-for="(item, index) in numerosArray" >
+									<h2 class="numerosJuego px-2" :data-id="index" ><span class="d1" v-bind:class="item.izquierda">{{item.dato.toString().substring(0, 1)}}</span><span class="d2" v-bind:class="item.derecha">{{item.dato.toString().substring(2, 1)}}</span></h2>
+								</div>
+							</div>
+								<div class="row" id="inputEditables" v-if="mostrarRespuestas">
+									<div class="d-flex flex-row py-2 rowEditable" v-for="(item, index) in digitos/2" :data-id="index">
+										<input type="text" v-model="numerosRespuesta[index].digito1" class="ml-2 inputEditable siguienteHermano" style='width: 50px' >
+										<input type="text" v-model="numerosRespuesta[index].digito2" class="mr-2 inputEditable siguientePadre" style='width: 50px' >
+									</div>
+								</div>
+		
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+		
+		
 		
 	</div>
 	

@@ -18,7 +18,8 @@ var app = new Vue({
 		idPalabras: '',
 		tempo: [],
 		desorden: [],
-		hayRespuesta:false
+		hayRespuesta:false,
+		mostrarFinal:false
 	},
 	methods:{
 		comenzar(){
@@ -49,7 +50,7 @@ var app = new Vue({
 			this.idPalabras = this.idPalabras.substring(0, this.idPalabras.length-1);
 
 			
-			fetch('https://revistaplumadigital.com/app/darPalabras.php?palabras='+this.idPalabras,{
+			fetch('http://medmemorygroup.com/app/darPalabras.php?palabras='+this.idPalabras,{
 				credentials: 'same-origin'
 			})
 			.then(function(response) {
@@ -72,16 +73,15 @@ var app = new Vue({
 			}
 		},
 		aleatorio(){
-			return Math.floor(Math.random() * (360 - 1 + 1) + 1);
+			return Math.floor(Math.random() * (615 - 1 + 1) + 1);
 		},
-		sumarDigito(){
-			if( $('#txtDigitos').val()>=6 ){
+		sumarDigito(){ //console.log( $('#txtDigitos').val() );
+			if( $('#txtDigitos').val()>=5 ){
 				this.digitos = $('#txtDigitos').val()
 				this.comenzar();
 			}
 		},
 		comprobar(){
-			//this.hayRespuesta:=true;
 			this.hayRespuesta=true;
 			$('#numerosPadre').removeClass('animated flash slower');
 			if(! this.modo ){
@@ -104,6 +104,7 @@ var app = new Vue({
 			this.desorden.splice(0, this.desorden.length);
 		},
 		cargarPalabras(){
+			this.idPalabras ='';
 			for (let index = 0; index < this.digitos; index++) {
 				this.idPalabras = this.idPalabras+ this.aleatorio()+',';
 			}
@@ -118,7 +119,7 @@ var app = new Vue({
 				this.tempo[nuevo] = valAnt;
 				console.log( this.tempo );
 			}else{ console.log( 'caso para arriba' );
-				let valNuevo = this.tempo[anterior]; console.log( 'moviendo '+ valNuevo );
+				let valNuevo = this.tempo[anterior]; console.log( 'moviendo: '+ valNuevo );
 				for(let i=anterior; i>nuevo; i--){
 					this.tempo[i] = this.tempo[i-1]
 				}
@@ -160,8 +161,8 @@ $('#app').on('keypress', '.siguientePadre', function (e) {
 });
 $('#app').on('mouseenter', '.itemMovible', function (e) {
 	$('#simpleList').sortable({
+		dataIdAttr: 'data-id',
 		onEnd: function(/**Event*/evt) {
-			
 			app.reordernar(evt.oldIndex, evt.newIndex);
 		},
 	});

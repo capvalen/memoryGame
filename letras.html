@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Memoria App</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<link rel="stylesheet" href="animate.css?version=1.0.4" >
+	<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet" />
+	<link href="animate.css?version=1.0.4" rel="stylesheet" />
 </head>
 <body>
-<style>
-.rounded-pill {
+<style type="text/css">.rounded-pill {
   border-radius: 1rem!important;
 }
 #divJuego{
@@ -22,79 +18,83 @@ label[for="chkModo"]{
 .numerosJuego{
 	font-weight: 700;font-size: 2.4rem;
 }
+.bg-danger {
+    background-color: #4267B2 !important;
+}
+#primColumna label{
+margin:10px 0;
+}
 </style>
 <section>
-	<div class="container px-0 ">
-		<img src="images/memoriaagil.png" alt="" class="m-5 " width="200px">
-	</div>
-	<div class="container-fluid px-0 bg-danger text-white text-center p-4">
-		<h2 class="display-3">Speed Memory</h2>
-	</div>
+<div class="container px-0 "><img alt="" class="m-5 " src="images/memoriaagil.png" width="400px" /></div>
+
+<div class="container-fluid px-0 bg-danger text-white text-center p-4">
+<h2 class="display-3">iWords</h2>
+</div>
 </section>
-	<div class="container my-4" id="app">
-		<div class="card rounded-pill">
-			<div class="card-body">
-				<div class="row row-cols-2 row-cols-md-4">
-					<div class="col text-center">
-						<label for="">Palabras:</label>
-						<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtDigitos" min=6 step=1 :value="digitos" @change="sumarDigito">
-					</div>
-					<div class="col text-center">
-						<label for="">Segundos:</label>
-						<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtSegundos" min=0.1 step="0.1" v-model="segundos">
-					</div>
-					<div class="col text-center">
-						<label for="">Modo rápido:</label>
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="chkModo" v-on:click="modo = !modo;" :disabled="bloquear">
-							<label class="custom-control-label"  for="chkModo"><span v-if="modo==false">No</span> <span v-else>Sí</span></label>
+
+<div class="container-fluid my-4" id="app">
+	<div class="row">
+		<div class="col-sm-12 col-md-3" id="primColumna">
+			<div class="card my-4 rounded-pill">
+				<div class="card-body">
+					<div class="row row-cols-1 ">
+						<div class="col text-center"><label for="">Palabras:</label> <input :readonly="bloquear" :value="digitos" @change="sumarDigito" class="form-control w-75 m-auto text-center" id="txtDigitos" min="6" step="1" type="number" /></div>
+		
+						<div class="col text-center"><label for="">Segundos:</label> <input :readonly="bloquear" class="form-control w-75 m-auto text-center" id="txtSegundos" min="0.1" step="0.1" type="number" v-model="segundos" /></div>
+		
+						<div class="col text-center"><label for="">Modo r&aacute;pido:</label>
+		
+						<div class="custom-control custom-checkbox"><input :disabled="bloquear" class="custom-control-input" id="chkModo" type="checkbox" v-on:click="modo = !modo;" /> 
+							<label class="custom-control-label" for="chkModo"><span v-if="modo==false">No</span> <span v-else="">S&iacute;</span></label>
 						</div>
-					</div>
+						</div>
+		
 					<div class="col text-center">
 						<label for="">Iniciar:</label>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="iniciar(); inicio=!inicio; bloquear=true; " v-if="inicio" id="btnIniciar">Empezar</button>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="comprobar(); comprueba=!comprueba;" v-if="comprueba" id="btnComprobar">Comprobar</button>
-						<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false" v-if="reiniciar" id="btnComprobar">Nuevo</button>
+						<button class="btn btn-outline-dark d-block m-auto" id="btnIniciar" type="button" v-if="inicio" v-on:click="iniciar(); inicio=!inicio; bloquear=true; ">Empezar</button>
+						<button class="btn btn-outline-dark d-block m-auto" id="btnComprobar" type="button" v-if="comprueba" v-on:click="comprobar(); comprueba=!comprueba;">Comprobar</button>
+						<button class="btn btn-outline-dark d-block m-auto" id="btnComprobar" type="button" v-if="reiniciar" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false">Nuevo</button>
+					</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
-		<div class="card my-4 rounded-pill">
-			<div class="card-body py-5 d-flex align-items-center" id="divJuego">
-				<div class="card-title px-5 " :class="{'container-fluid row row-cols-2 d-flex justify-content-between' : hayRespuesta, 'm-auto': !hayRespuesta }">
-					<div class="col"id="numerosPadre" >
-						<div class="" v-if="!mostrarInputs" v-for="(item, index) in letrasArray">
-							<h2 class="numerosJuego row"><span v-bind:class="item.resultado">{{item.dato}}</span></h2>
+
+
+		<div class="col-6">
+			<div class="card my-4 rounded-pill">
+				<div class="card-body py-5 d-flex align-items-center" id="divJuego">
+					<div :class="{' d-flex justify-content-between w-100' : hayRespuesta, 'm-auto': !hayRespuesta }" class="card-title px-5 ">
+						<div class="col" id="numerosPadre">
+							<div v-for="(item, index) in letrasArray" v-if="!mostrarInputs">
+								<h2 class="numerosJuego row"><span v-bind:class="item.resultado">{{item.dato}}</span></h2>
+							</div>
+						</div>
+						<div class="col" id="inputEditables" v-if="mostrarInputs" >
+							<div class="list-group rowEditable" id="simpleList">
+								<div class="list-group-item itemMovible"   v-for="(item, index) in desorden" :data-id="index">{{item}}</div>
+							</div>
+						</div>
+						<div class="col" id="numerosHijo" v-if="hayRespuesta" >
+							<div v-for="(item, index) in tempo">
+								<h2 class="numerosJuego row"><span >{{item}}</span></h2>
+							</div>
 						</div>
 					</div>
-
-				  
-				
-				
-		
-					<div class="col" id="inputEditables" v-if="mostrarRespuestas">
-						<div id="simpleList" class="list-group rowEditable">
-							<div class="list-group-item itemMovible" v-for="(item, index) in desorden" :data-id="index" >{{item}}</div>
-						</div>
-					</div>
-
-					
 				</div>
 			</div>
 		</div>
-		
 	</div>
 	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
 
-
-<script src="appLetras.js?version=1.0"></script>
-
+	
+</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script><script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
+	<script src="appLetras.js?version=1.6"></script>
 </body>
 </html>
