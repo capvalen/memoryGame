@@ -76,7 +76,7 @@ var app = new Vue({
 			return Math.floor(Math.random() * (615 - 1 + 1) + 1);
 		},
 		sumarDigito(){ //console.log( $('#txtDigitos').val() );
-			if( $('#txtDigitos').val()>=5 ){
+			if( $('#txtDigitos').val()>=5 && $('#txtDigitos').val()<= 9 ){
 				this.digitos = $('#txtDigitos').val()
 				this.comenzar();
 			}
@@ -167,3 +167,10 @@ $('#app').on('mouseenter', '.itemMovible', function (e) {
 		},
 	});
 });
+$('#txtDigitos').focusout(function () {
+	if( $('#txtDigitos').val()>9 ){
+		$('#txtDigitos').val(9)
+	}else if( $('#txtDigitos').val()<5 ){
+		$('#txtDigitos').val(5)
+	}
+})

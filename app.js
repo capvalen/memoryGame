@@ -30,9 +30,14 @@ var app = new Vue({
 			//console.log( this.numerosArray );
 		},
 		numeroAleatorios(){
+			var temp='';
 			for(i=0; i<this.digitos/2; i++ ){
 				//this.numerosArray[i] = this.aleatorio();
-				this.numerosArray[i].dato = this.aleatorio();
+				temp = ("0"+this.aleatorio()).toString(); 
+				this.numerosArray[i].dato = temp.substring(temp.length-2);
+
+				console.log( this.numerosArray[i].dato );
+
 				
 			}
 			//console.log( this.numerosArray );
@@ -49,7 +54,8 @@ var app = new Vue({
 			}
 		},
 		aleatorio(){
-			return Math.floor(Math.random() * (99 - 10 + 1) + 10);
+			return Math.floor(Math.random() * (99 - 1 + 1) + 1);
+			//console.log(aleato)
 		},
 		sumarDigito(){
 			if( $('#txtDigitos').val()>=6 ){
@@ -90,6 +96,9 @@ var app = new Vue({
 			this.comenzar();
 			this.inicio=true;
 		},
+		/* siguienteHermano(){ console.log('hermano1')
+			this.next().focus();
+		} */
 		
 	},
 	
@@ -118,9 +127,12 @@ function animateCSS(element, animationName, callback) {
 
 addEventListener('animationend', function() { app.mostrarDatos();  });
 
-$('#app').on('keypress', '.siguienteHermano', function (e) {
-	$(this).next().focus();
+$('#app').on('keyup', '.siguienteHermano', function (e) {
+	//alert('presionado')
+	//$(this).next().focus();
+	this.nextSibling.nextSibling.focus();
 });
-$('#app').on('keypress', '.siguientePadre', function (e) {
+$('#app').on('keyup', '.siguientePadre', function (e) {
 	$(this).parent().next().find('.siguienteHermano').focus();
+	//this.parent.querySelector('.siguienteHermano').focus();
 });
