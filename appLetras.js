@@ -19,7 +19,8 @@ var app = new Vue({
 		tempo: [],
 		desorden: [],
 		hayRespuesta:false,
-		mostrarFinal:false
+		mostrarFinal:false,
+		comienza:true
 	},
 	methods:{
 		comenzar(){
@@ -29,7 +30,7 @@ var app = new Vue({
 			this.numerosRespuesta.splice(0, this.numerosRespuesta.length);
 			
 			for(i=0; i<this.digitos; i++ ){
-				this.letrasArray.push({dato: 'XXX', resultado: ''});
+				this.letrasArray.push({dato: '***', resultado: ''});
 				this.numerosRespuesta.push({digito1: '', digito2: ''});
 			}
 			//console.log( this.letrasArray );
@@ -48,6 +49,7 @@ var app = new Vue({
 			
 			this.cargarPalabras();
 			this.idPalabras = this.idPalabras.substring(0, this.idPalabras.length-1);
+			console.log( 'serie='+ this.idPalabras );
 
 			
 			fetch('http://medmemorygroup.com/app/darPalabras.php?palabras='+this.idPalabras,{
@@ -73,7 +75,7 @@ var app = new Vue({
 			}
 		},
 		aleatorio(){
-			return Math.floor(Math.random() * (615 - 1 + 1) + 1);
+			return Math.floor(Math.random() * (698 - 1 + 1) + 1);
 		},
 		sumarDigito(){ //console.log( $('#txtDigitos').val() );
 			if( $('#txtDigitos').val()>=5 && $('#txtDigitos').val()<= 9 ){
@@ -100,6 +102,7 @@ var app = new Vue({
 			this.comenzar();
 			this.inicio=true;
 			this.hayRespuesta=false;
+			this.comienza=true;
 			
 			this.desorden.splice(0, this.desorden.length);
 		},
@@ -151,7 +154,7 @@ function animateCSS(element, animationName, callback) {
 	node.addEventListener('animationend', handleAnimationEnd)
 }
 
-addEventListener('animationend', function() { app.mostrarDatos();  });
+addEventListener('animationend', function() { app.mostrarDatos(); app.comienza=false; });
 
 $('#app').on('keypress', '.siguienteHermano', function (e) {
 	$(this).next().focus();
@@ -168,8 +171,8 @@ $('#app').on('mouseenter', '.itemMovible', function (e) {
 	});
 });
 $('#txtDigitos').focusout(function () {
-	if( $('#txtDigitos').val()>9 ){
-		$('#txtDigitos').val(9)
+	if( $('#txtDigitos').val()>15 ){
+		$('#txtDigitos').val(15)
 	}else if( $('#txtDigitos').val()<5 ){
 		$('#txtDigitos').val(5)
 	}

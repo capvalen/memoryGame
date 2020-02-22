@@ -5,7 +5,7 @@ var app = new Vue({
 		modo: false,
 		inicio: true,
 		digitos: 6,
-		segundos: 1.1,
+		segundos: 1,
 		tiempoVencido: false,
 		numerosArray: [],
 		numerosRespuesta: [],
@@ -14,7 +14,8 @@ var app = new Vue({
 		comprueba: false,
 		reiniciar:false,
 		inputPlus: 0,
-		bloquear: false
+		bloquear: false,
+		comienza:true,
 	},
 	methods:{
 		comenzar(){
@@ -24,7 +25,7 @@ var app = new Vue({
 			this.numerosRespuesta.splice(0, this.numerosRespuesta.length);
 			
 			for(i=0; i<this.digitos/2; i++ ){
-				this.numerosArray.push({dato: 'XX', izquierda: '', derecha:''});
+				this.numerosArray.push({dato: '**', izquierda: '', derecha:''});
 				this.numerosRespuesta.push({digito1: '', digito2: ''});
 			}
 			//console.log( this.numerosArray );
@@ -95,6 +96,7 @@ var app = new Vue({
 		nuevo(){
 			this.comenzar();
 			this.inicio=true;
+			this.comienza=true;
 		},
 		/* siguienteHermano(){ console.log('hermano1')
 			this.next().focus();
@@ -125,14 +127,21 @@ function animateCSS(element, animationName, callback) {
 	node.addEventListener('animationend', handleAnimationEnd)
 }
 
-addEventListener('animationend', function() { app.mostrarDatos();  });
+addEventListener('animationend', function() { app.mostrarDatos(); app.comienza=false; });
 
-$('#app').on('keyup', '.siguienteHermano', function (e) {
+$('#app').on('keypress', '.siguienteHermano', function (e) {
 	//alert('presionado')
 	//$(this).next().focus();
+	if($(this).val().length>=1 ){
+		e.preventDefault();
+	}
 	this.nextSibling.nextSibling.focus();
+	
 });
-$('#app').on('keyup', '.siguientePadre', function (e) {
+$('#app').on('keypress', '.siguientePadre', function (e) {
+	if($(this).val().length>=1){
+		e.preventDefault();
+	}
 	$(this).parent().next().find('.siguienteHermano').focus();
 	//this.parent.querySelector('.siguienteHermano').focus();
 });
