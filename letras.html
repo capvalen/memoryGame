@@ -4,6 +4,7 @@
 	<title>Memoria App</title>
 	<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet" />
 	<link href="animate.css?version=1.0.4" rel="stylesheet" />
+	<link rel="stylesheet" href="css/fontello.css">
 </head>
 <body>
 <style type="text/css">.rounded-pill {
@@ -25,7 +26,29 @@ label[for="chkModo"]{
 margin:10px 0;
 }
 .asterisco{
-	font-size: 5rem!important;line-height: 0.9;
+	/* font-size: 5rem!important;line-height: 0.9; */
+}
+.itemMovible{
+	text-align: center;
+}
+.asterisco span:before{
+	font-family: "fontello";
+  font-style: normal;
+	content: '\e800\e800\e800';
+	font-size: 1.12rem;
+}
+#numerosPadre  .numerosJuego{
+	line-height: 0.9;
+}
+.list-group-item{
+	padding: 0.3rem 1.25rem;
+}
+#version{
+	right: 7px;
+	position: absolute;
+	bottom: 4px;
+	font-size: 0.7rem;
+	color: #a2a1a1;
 }
 </style>
 <section>
@@ -34,7 +57,7 @@ margin:10px 0;
 			<img alt="" class=" img-fluid mt-5 my-auto" src="images/memoriaagil.png?v=3" width="400px" />
 		</div>
 		<div class="col text-left">
-			<h2 class="display-3">iWords</h2>
+			<h2 class="text-center display-3">iWords</h2>
 		</div>
 	</div>
 </section>
@@ -58,7 +81,7 @@ margin:10px 0;
 		
 					<div class="col text-center mt-3">
 						
-						<button class="btn btn-outline-dark d-block m-auto" id="btnIniciar" type="button" v-if="inicio" v-on:click="iniciar(); inicio=!inicio; bloquear=true; ">Empezar</button>
+						<button class="btn btn-outline-dark d-block m-auto" id="btnIniciar" type="button" v-if="inicio" v-on:click="iniciar(); inicio=!inicio; bloquear=true; ">Comenzar</button>
 						<button class="btn btn-outline-dark d-block m-auto" id="btnComprobar" type="button" v-if="comprueba" v-on:click="comprobar(); comprueba=!comprueba;">Comprobar</button>
 						<button class="btn btn-outline-dark d-block m-auto" id="btnComprobar" type="button" v-if="reiniciar" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false">Nuevo</button>
 					</div>
@@ -70,10 +93,10 @@ margin:10px 0;
 
 		<div class="col-sm-12 col-md">
 			<div class="card my-4 rounded-pill">
-				<div class="card-body py-5 d-flex align-items-center" id="divJuego">
-					<div :class="{' d-flex justify-content-between w-100' : hayRespuesta, 'm-auto': !hayRespuesta }" class="card-title px-5 ">
+				<div class="card-body py-2 d-flex align-items-center" id="divJuego">
+					<div :class="{' d-flex justify-content-between w-100' : hayRespuesta, 'mx-auto': !hayRespuesta }" class="card-title px-5 ">
 						<div class="col" id="numerosPadre">
-								<h2 v-for="(item, index) in letrasArray" v-if="!mostrarInputs" class="numerosJuego  text-center" :class="{'asterisco':comienza}"><span v-bind:class="item.resultado">{{item.dato}}</span></h2>
+								<h3 v-for="(item, index) in letrasArray" v-if="!mostrarInputs" class="numerosJuego text-center mb-0" :class="{'asterisco':comienza}"><span v-bind:class="item.resultado">{{item.dato}}</span></h3>
 						</div>
 						<div class="col" id="inputEditables" v-if="mostrarInputs" >
 							<div class="list-group rowEditable" id="simpleList">
@@ -82,11 +105,12 @@ margin:10px 0;
 						</div>
 						<div class="col d-none" id="numerosHijo" v-if="hayRespuesta" >
 							<div v-for="(item, index) in tempo">
-								<h2 class="numerosJuego row"><span >{{item}}</span></h2>
+								<h3 class="numerosJuego row"><span >{{item}}</span></h3>
 							</div>
 						</div>
 					</div>
 				</div>
+				<span class="float-right" id="version">Versión {{version}}</span>
 			</div>
 		</div>
 	</div>
@@ -101,6 +125,6 @@ margin:10px 0;
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
-	<script src="appLetras.js?version=1.9"></script>
+	<script src="appLetras.js?version=0.12"></script>
 </body>
 </html>

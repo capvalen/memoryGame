@@ -16,6 +16,8 @@ var app = new Vue({
 		inputPlus: 0,
 		bloquear: false,
 		comienza:true,
+		contadorInput:0,
+		version:"1.0.65"
 	},
 	methods:{
 		comenzar(){
@@ -25,7 +27,7 @@ var app = new Vue({
 			this.numerosRespuesta.splice(0, this.numerosRespuesta.length);
 			
 			for(i=0; i<this.digitos/2; i++ ){
-				this.numerosArray.push({dato: '**', izquierda: '', derecha:''});
+				this.numerosArray.push({dato: '', izquierda: '', derecha:''});
 				this.numerosRespuesta.push({digito1: '', digito2: ''});
 			}
 			//console.log( this.numerosArray );
@@ -98,9 +100,8 @@ var app = new Vue({
 			this.inicio=true;
 			this.comienza=true;
 		},
-		/* siguienteHermano(){ console.log('hermano1')
-			this.next().focus();
-		} */
+		pruebaHijo(index){ console.log($(this)) /* accionHijo(index); */ },
+		pruebaPadre(index){ accionPadre(index); }
 		
 	},
 	
@@ -129,7 +130,35 @@ function animateCSS(element, animationName, callback) {
 
 addEventListener('animationend', function() { app.mostrarDatos(); app.comienza=false; });
 
-$('#app').on('keypress', '.siguienteHermano', function (e) {
+function unicoDigito(evt, valor){
+	if(event.which != 8 && event.which != 46 && event.which != 37 && event.which != 39 && event.which != 116  ){ //backspace, delete, left, right, F5
+		
+		if(valor.toString().length>0){  evt.preventDefault(); }
+	}else{
+		return false;
+	}
+	
+}
+function keyPrimero(valor, item){ 
+	if(valor>9){ item.value= valor.toString().substring(1,0);
+		app.numerosRespuesta[ `${$(item).attr('data-id')}` ].digito1=valor.toString().substring(1,0); 
+		$(item).next().focus();
+	}else{
+		$(item).next().focus();
+	}
+}
+function keySegundo(valor, item){ 
+	if(valor>9){ item.value= valor.toString().substring(1,0);
+		app.numerosRespuesta[ `${$(item).attr('data-id')}` ].digito2=valor.toString().substring(1,0); 
+		$(item).parent().next().find('.siguienteHermano').focus();
+		}else{
+			$(item).parent().next().find('.siguienteHermano').focus();
+		}
+}
+$('#app').on( 'focus', 'input', function(){
+	$(this).select();
+})
+/* $('#app').on('keypress', '.siguienteHermano', function (e) { console.log('buscar padre')
 	//alert('presionado')
 	//$(this).next().focus();
 	if($(this).val().length>=1 ){
@@ -137,11 +166,11 @@ $('#app').on('keypress', '.siguienteHermano', function (e) {
 	}
 	this.nextSibling.nextSibling.focus();
 	
-});
-$('#app').on('keypress', '.siguientePadre', function (e) {
+}); */
+/* $('#app').on('keypress', '.siguientePadre', function (e) { console.log('buscar padre')
 	if($(this).val().length>=1){
 		e.preventDefault();
 	}
 	$(this).parent().next().find('.siguienteHermano').focus();
 	//this.parent.querySelector('.siguienteHermano').focus();
-});
+}); */

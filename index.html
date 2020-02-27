@@ -7,6 +7,7 @@
 	<title>Memoria App</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" href="animate.css?version=1.0.4" >
+	<link rel="stylesheet" href="css/fontello.css">
 </head>
 <body>
 <style>
@@ -20,7 +21,7 @@ label[for="chkModo"]{
 	cursor:pointer;
 }
 .numerosJuego{
-	font-weight: 700;font-size: 2.4rem;
+	font-weight: 700; /* font-size: 2.4rem; */
 }
 #primColumna label{
 margin:10px 0;
@@ -29,7 +30,33 @@ margin:10px 0;
     background-color: #4267B2 !important;
 }
 .asterisco{
-	font-size: 5rem!important;
+	/* font-size: 2rem!important; line-height: 0.6 */
+}
+.asterisco span:before{
+	font-family: "fontello";
+  font-style: normal;
+	content: '\e800';
+	font-size: 1.12rem;
+}
+
+#version{
+	right: 7px;
+	position: absolute;
+	bottom: 4px;
+	font-size: 0.7rem;
+	color: #a2a1a1;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#inputEditables .rowEditable{width: 53px;}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
 }
 </style>
 <section>
@@ -49,7 +76,7 @@ margin:10px 0;
 					<div class="card-body">
 						<div class="row row-cols-1">
 							<div class="col text-center">
-								<label for="">Dígitos:</label>
+								<label for="">Números:</label>
 								<input type="number" class="form-control w-75 m-auto text-center" :readonly="bloquear" id="txtDigitos" min=6 step=2 :value="digitos" @change="sumarDigito">
 							</div>
 							<div class="col text-center">
@@ -59,19 +86,18 @@ margin:10px 0;
 							<div class="col text-center">
 								<label for="">Rellenar casilleros:</label>
 								<div class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input" id="chkModo" v-on:click="modo = !modo;" :disabled="bloquear">
-									<label class="custom-control-label"  for="chkModo"><span v-if="modo==false">No</span> <span v-else>Sí</span></label>
+									<input type="checkbox" class="custom-control-input" id="chkModo" v-on:click="modo = !modo;" :disabled="bloquear" checked>
+									<label class="custom-control-label"  for="chkModo"><span v-if="!modo">Si</span> <span v-else>No</span></label>
 								</div>
 							</div>
 							<div class="col text-center">
 							
-								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="iniciar(); inicio=!inicio; bloquear=true;" v-if="inicio" id="btnIniciar">Empezar</button>
+								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="iniciar(); inicio=!inicio; bloquear=true;" v-if="inicio" id="btnIniciar">Comenzar</button>
 								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="comprobar(); comprueba=!comprueba;" v-if="comprueba" id="btnComprobar">Comprobar</button>
 								<button type="button" class="btn btn-outline-dark d-block m-auto" v-on:click="nuevo(); reiniciar=!reiniciar; bloquear=false" v-if="reiniciar" id="btnComprobar">Nuevo</button>
 							</div>
 						</div>
 					</div>
-		
 				</div>
 			</div>
 
@@ -85,16 +111,18 @@ margin:10px 0;
 									<h2 class="numerosJuego px-2" :class="{'asterisco':comienza}" :data-id="index" ><span class="d1" v-bind:class="item.izquierda">{{item.dato.toString().substring(0, 1)}}</span><span class="d2" v-bind:class="item.derecha">{{item.dato.toString().substring(2, 1)}}</span></h2>
 								</div>
 							</div>
-								<div class="row" id="inputEditables" v-if="mostrarRespuestas">
+								<div class="row  d-flex justify-content-center" id="inputEditables" v-if="mostrarRespuestas">
 									<div class="d-flex flex-row py-2 rowEditable" v-for="(item, index) in digitos/2" :data-id="index">
-										<input type="text" v-model="numerosRespuesta[index].digito1" class="ml-2 inputEditable siguienteHermano" style='width: 50px' >
-										<input type="text" v-model="numerosRespuesta[index].digito2" class="mr-2 inputEditable siguientePadre" style='width: 50px' >
+										<input :data-id="index" type="number" onkeydown="unicoDigito(event, this.value)" onkeyup="keyPrimero(this.value, this)" v-model="numerosRespuesta[index].digito1" class="ml-2 inputEditable siguienteHermano" style='width: 20px' min="0" max="9" >
+										<input :data-id="index" type="number" onkeydown="unicoDigito(event, this.value)" onkeyup="keySegundo(this.value, this)" v-model="numerosRespuesta[index].digito2" class="mr-2 inputEditable siguientePadre" style='width: 20px' min="0" max="9" >
 									</div>
+
 								</div>
 		
 							
 						</div>
 					</div>
+					<span class="float-right" id="version">Versión {{version}}</span>
 				</div>
 			</div>
 		</div>
@@ -108,7 +136,7 @@ margin:10px 0;
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="app.js?version=1.19"></script>
+<script src="app.js?version=0.65"></script>
 
 </body>
 </html>

@@ -20,7 +20,8 @@ var app = new Vue({
 		desorden: [],
 		hayRespuesta:false,
 		mostrarFinal:false,
-		comienza:true
+		comienza:true,
+		version: "1.0.12"
 	},
 	methods:{
 		comenzar(){
@@ -30,7 +31,7 @@ var app = new Vue({
 			this.numerosRespuesta.splice(0, this.numerosRespuesta.length);
 			
 			for(i=0; i<this.digitos; i++ ){
-				this.letrasArray.push({dato: '***', resultado: ''});
+				this.letrasArray.push({dato: '', resultado: ''});
 				this.numerosRespuesta.push({digito1: '', digito2: ''});
 			}
 			//console.log( this.letrasArray );
@@ -52,7 +53,7 @@ var app = new Vue({
 			console.log( 'serie='+ this.idPalabras );
 
 			
-			fetch('http://medmemorygroup.com/app/darPalabras.php?palabras='+this.idPalabras,{
+			fetch('https://medmemorygroup.com/app/darPalabras.php?palabras='+this.idPalabras,{
 				credentials: 'same-origin'
 			})
 			.then(function(response) {
@@ -78,7 +79,7 @@ var app = new Vue({
 			return Math.floor(Math.random() * (698 - 1 + 1) + 1);
 		},
 		sumarDigito(){ //console.log( $('#txtDigitos').val() );
-			if( $('#txtDigitos').val()>=5 && $('#txtDigitos').val()<= 9 ){
+			if( $('#txtDigitos').val()>=5 && $('#txtDigitos').val()<= 15 ){
 				this.digitos = $('#txtDigitos').val()
 				this.comenzar();
 			}
