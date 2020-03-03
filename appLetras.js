@@ -21,7 +21,7 @@ var app = new Vue({
 		hayRespuesta:false,
 		mostrarFinal:false,
 		comienza:true,
-		version: "1.0.12"
+		version: "1.0.18", repetidos:[]
 	},
 	methods:{
 		comenzar(){
@@ -104,13 +104,20 @@ var app = new Vue({
 			this.inicio=true;
 			this.hayRespuesta=false;
 			this.comienza=true;
+			this.repetidos=[];
 			
 			this.desorden.splice(0, this.desorden.length);
 		},
 		cargarPalabras(){
-			this.idPalabras ='';
+			this.idPalabras =''; var alea='';
 			for (let index = 0; index < this.digitos; index++) {
-				this.idPalabras = this.idPalabras+ this.aleatorio()+',';
+				alea = this.aleatorio();
+				if( this.repetidos.indexOf( alea )=="-1"){
+					this.repetidos.push(alea)
+					this.idPalabras = this.idPalabras+alea+',' ;
+				}else{  console.log( "repetido "+ alea );
+					index--;
+				}
 			}
 		},
 		reordernar(anterior, nuevo){ 
