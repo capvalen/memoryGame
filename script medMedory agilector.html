@@ -12,14 +12,14 @@
 <div id="app">
 	
 	<section v-if="etapa =='inicial'">
-		<div class="bg-secondary text-light p-2">
+		<div class="bg-secondary text-light p-1">
 			<p class="fs-3 fw-bold text-center">Copia y pega abajo el texto que quieres Agileer</p>
 		</div>
 		<div class="my-2" id="textoInicial">
 			<textarea class="form-control" rows="5" v-model="textoInicial">
 			</textarea>
 			<div class="mt-2 d-grid d-flex justify-content-center">
-				<button class="btn btn-danger " @click="inciarAplicativo()"><span class="fs-5">COMENZAR AGILECTURA</span></button>
+				<button class="btn btn-danger " @click="inciarAplicativo()"><span class="fs-5">AGILECTURA</span></button>
 			</div>
 		</div>
 	</section>
@@ -30,10 +30,10 @@
 			</div>
 			<div class="col-sm-6 " v-show="!verSubConfiguracion">
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-					<button class="btn btn-morado px-4 "><i class="bi bi-window-split"></i></button>
+					<!-- <button class="btn btn-morado px-4 "><i class="bi bi-window-split"></i></button>
 					<button class="btn btn-primary px-4 "><i class="bi bi-scissors"></i></button>
 					<button class="btn btn-warning px-4 "><i class="bi bi-eye"></i></button>
-					<button class="btn btn-success px-4 "><i class="bi bi-circle-fill"></i></button>
+					<button class="btn btn-success px-4 "><i class="bi bi-circle-fill"></i></button> -->
 					<button class="btn btn-danger px-4 " @click="verSubConfiguracion=true"><i class="bi bi-gear"></i></button>
 				</div>
 			</div>
@@ -72,33 +72,39 @@
 		<div class="alert alert-primary my-2" role="alert" v-if="etapa=='aplicativo'">
 			Estás a punto de leer <b>{{ totalPalabras }}</b> palabras distribuidas entre <b>{{ lineasLeer }}</b> Líneas de <b>{{ numPalabras }} palabras cada una</b>, a una velocidad de <b>{{ palabrasxMinuto }} PPM (Palabras Por Minuto).</b> Aquí abajo tienes una previsualización de la línea más ancha de tu texto, con la configuración actual. Configura el tamaño y el estilo del texto haciendo clic en el botón <strong><i class="bi bi-gear-fill"></i></strong> y personaliza tu experiencia con Agilector antes de empezar. Una vez lo hayas hecho, haz clic en el botón “Empezar Lectura” para empezar a leer.
 		</div>
-		<div v-if="etapa=='aplicativo'" id="preview" class="text-center">
+		<div v-if="etapa=='aplicativo'" id="preview" class="text-center preview">
 			{{preview}}
 		</div>
 		<div class="mt-2 d-grid d-flex justify-content-center" v-if="!verSubConfiguracion">
-			<button class="btn btn-danger " @click="empezarLectura()"><span class="fs-5">EMPEZAR LECTURA</span></button>
+			<button class="btn btn-danger " @click="empezarLectura()"><span class="fs-5">Comenzar Lectura</span></button>
 		</div>
 	</section>
-	<section>
-		<div v-if="etapa=='lectura'" id="lectura"></div>
-		<div id="pausas" class="d-grid gap-2 d-flex justify-content-center">
-			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1" title="Comenzar"><i class="bi bi-play-fill"></i></button>
-			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1" title="Pausar"><i class="bi bi-pause-fill"></i></button>
-			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1" title="Comenzar de nuevo"><i class="bi bi-arrow-clockwise"></i></button>
+	<section v-if="etapa=='lectura'" id="lectura">
+		<div class="row">
+			<div class="col-sm-6">
+				<button class="btn btn-warning" @click="regresarDeLectura()"><i class="bi bi-arrow-left"></i></button>
+			</div>
 		</div>
+		<div class="text-center preview" id="prevLectura">{{preview}}</div>
+		<div id="pausas" class="d-grid gap-2 d-flex justify-content-center">
+			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1 d-none" title="Comenzar" @click="continuar()"><i class="bi bi-play-fill"></i></button>
+			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1" title="Pausar" @click="pausar()"><i class="bi bi-pause-fill"></i></button>
+			<button class="btn bg-secondary-subtle btn-lg rounded-1 mx-1" title="Comenzar de nuevo" @click="reiniciar()"><i class="bi bi-skip-backward"></i></button>
+		</div>		
 	</section>
 
 </div>
 
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <script>
 	const { createApp } = Vue
-
+	
 	createApp({
 		data() {
 			return {
 				textoInicial: "Para empezar, sólo tienes que copiar y pegar cualquier texto que te gustaría leer en este cuadro de texto. Agilector te ayudará a leer más rápido mostrando cada palabra o grupo de palabras durante sólo un instante, utilizando lo que se llama una Presentación Rápida de Series Visuales para aumentar tu velocidad de lectura. En el menú de ajustes, puedes determinar a qué velocidad quieres leer (palabras por minuto). También puedes elegir el número de palabras que te gustaría ver a la vez (tamaño del fragmento). Y también puedes elegir el tamaño y el tipo de fuente que prefieras. De esta forma, tu experiencia será lo más personalizada posible. Para ser lo más productivo posible con Agilector, es importante que practiques siempre con una velocidad un poco superior a tu velocidad cómoda de leer. Una vez hayas guardado la configuración, presiona el botón “Agilectura” para empezar a leer.",
-				etapa: 'lectura', numPalabras: 4, palabrasxMinuto:100, verSubConfiguracion:false, fuentes:[], peso:2, fuente_tamano:50, preview:''
+				etapa: 'inicial', numPalabras: 4, palabrasxMinuto:100, verSubConfiguracion:false, fuentes:[], peso:2, fuente_tamano:50, preview:'', aTexto:[], intervalo:null, inicio:0
 			}
 		},
 		mounted(){
@@ -111,16 +117,51 @@
 			inciarAplicativo(){
 				this.etapa='aplicativo'
 			},
-			empezarLectura(){
+			async empezarLectura(){
 				this.etapa = 'lectura'
+				this.aTexto = this.textoInicial.split(' ')
+				this.preview = 'ㅤ';
+				await this.sleep(1000);
+
+				this.intervalo = setInterval( ()=>{ this.extraerPalabras(); } , this.tiempo)
 			},
+			
 			calcularPreview(){
-				let temporal = this.textoInicial.split(' ').slice(0,this.numPalabras);
-				this.preview = temporal.join(' ');
+				/* let temporal = this.textoInicial.split(' ').slice(0,this.numPalabras);
+				this.preview = temporal.join(' '); */
+				this.preview="Usa siempre la misma velocidad"
 			},
 			cambiarTamano(){
 				document.getElementById('preview').style.fontSize = `${this.fuente_tamano}px`
 				document.getElementById('lectura').style.fontSize = `${this.fuente_tamano}px`
+			},
+			extraerPalabras(){
+				this.preview = '';
+				for(i=this.inicio; i<this.inicio+this.numPalabras; i++){
+					this.preview += this.aTexto[i]+' '
+				}
+				//console.log(this.preview)
+				this.inicio+=this.numPalabras;
+				if(this.inicio >= this.aTexto.length){
+					this.preview=''
+					clearInterval(this.intervalo)
+				}
+			},
+			pausar(){ 
+				clearInterval(this.intervalo);
+			},
+			continuar(){this.intervalo = setInterval( ()=> this.extraerPalabras(), this.tiempo)},
+			reiniciar(){
+				this.inicio=0;
+				this.empezarLectura();
+			},
+			sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			},
+			regresarDeLectura(){
+				this.etapa='aplicativo';
+				this.preview='Usa siempre la misma velocidad'; 
+				clearInterval(this.intervalo)
 			}
 		},
 		computed:{
@@ -129,13 +170,26 @@
 			},
 			lineasLeer(){
 				return parseFloat(this.totalPalabras / this.numPalabras).toFixed(0);
+			},
+			tiempo(){
+				return 60000/this.palabrasxMinuto
 			}
 		}
 	}).mount('#app')
 </script>
 <style>
-	#preview{
+	.preview{
 		font-size: 50px;
-
 	}
+	.btn-danger{
+		background-color:#FB3C3C
+	}
+	@media screen and (max-width: 768px) {
+  .preview {
+    font-size:40px
+  }
+	#prevLectura{
+		min-height: 120px;
+	}
+}
 </style>
