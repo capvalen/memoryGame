@@ -1,6 +1,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 <style>
 	.btn-morado{
 		background-color:#5c08ac;border: 1px solid #5c08ac;color: white; 
@@ -13,7 +14,7 @@
 	
 	<section v-if="etapa =='inicial'">
 		<div class="bg-secondary text-light p-1">
-			<p class="fs-3 fw-bold text-center">Copia y pega abajo el texto que quieres Agileer</p>
+			<p class="fs-3 fw-bold text-center">Copia y pega abajo el texto que quieres leer</p>
 		</div>
 		<div class="my-2" id="textoInicial">
 			<textarea class="form-control" rows="5" v-model="textoInicial">
@@ -26,7 +27,7 @@
 	<section id="aplicativo" :class="{ 'd-none': etapa!='aplicativo'}">
 		<div class="row">
 			<div class="col-sm-6">
-				<button class="btn btn-warning"><i class="bi bi-arrow-left"></i></button>
+				<button class="btn btn-warning" @click="etapa='inicial'"><i class="bi bi-arrow-left"></i></button>
 			</div>
 			<div class="col-sm-6 " v-show="!verSubConfiguracion">
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -95,10 +96,10 @@
 
 </div>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-<script>
-	const { createApp } = Vue
+
+<script type="module">
+	import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 	
 	createApp({
 		data() {
@@ -137,7 +138,7 @@
 			},
 			extraerPalabras(){
 				this.preview = '';
-				for(i=this.inicio; i<this.inicio+this.numPalabras; i++){
+				for(let i=this.inicio; i<this.inicio+this.numPalabras; i++){
 					this.preview += this.aTexto[i]+' '
 				}
 				//console.log(this.preview)
@@ -153,6 +154,7 @@
 			continuar(){this.intervalo = setInterval( ()=> this.extraerPalabras(), this.tiempo)},
 			reiniciar(){
 				this.inicio=0;
+				clearInterval(this.intervalo);
 				this.empezarLectura();
 			},
 			sleep(ms) {
